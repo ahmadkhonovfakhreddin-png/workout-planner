@@ -7,9 +7,9 @@ const quickLinks = [
 ]
 
 const social = [
-  { href: '#', label: 'Instagram' },
+  { href: 'https://www.instagram.com/ahmadkhonovvv?igsh=MTFmMDNjcnV1OW1kbw==', label: 'Instagram' },
   { href: '#', label: 'Twitter' },
-  { href: '#', label: 'YouTube' },
+  { href: 'https://youtu.be/9DmCYV45LmI?si=EGNEDV6AUiYy8TQM', label: 'YouTube' },
 ]
 
 export default function Footer() {
@@ -32,8 +32,8 @@ export default function Footer() {
         </div>
         <div className="footer-contact">
           <h4>Contact</h4>
-          <p><a href="mailto:hello@muscle.example">hello@muscle.example</a></p>
-          <p><a href="tel:+15551234567">+1 (555) 123-4567</a></p>
+          <p><a href="mailto:ahmadkhonovfakhreddin@gmail.com">ahmadkhonovfakhreddin@gmail.com</a></p>
+          <p><a href="tel:+992027507177">+992 027507177</a></p>
         </div>
         <div className="footer-social">
           <h4>Follow Us</h4>

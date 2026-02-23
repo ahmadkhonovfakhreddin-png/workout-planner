@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function Header() {
+export default function Header({ user, onGetStarted, onGoToPortal }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const navLinks = [
     { href: '#about', label: 'About' },
@@ -8,6 +8,16 @@ export default function Header() {
     { href: '#success-stories', label: 'Success Stories' },
     { href: '#pricing', label: 'Pricing' },
   ]
+  const handleGetStarted = (e) => {
+    e?.preventDefault?.()
+    if (onGetStarted) onGetStarted()
+    setMenuOpen(false)
+  }
+  const handlePortal = (e) => {
+    e?.preventDefault?.()
+    if (onGoToPortal) onGoToPortal()
+    setMenuOpen(false)
+  }
   return (
     <header className="global-header" id="global-header">
       <div className="header-inner">
@@ -18,8 +28,11 @@ export default function Header() {
           {navLinks.map(({ href, label }) => (
             <a key={href} href={href}>{label}</a>
           ))}
+          {onGoToPortal && (
+            <button type="button" className="header-portal-link" onClick={handlePortal}>My Portal</button>
+          )}
         </nav>
-        <a href="#pricing" className="btn btn-header-cta">Get Started</a>
+        <button type="button" className="btn btn-header-cta" onClick={handleGetStarted}>Get Started</button>
         <button
           type="button"
           className={'hamburger ' + (menuOpen ? 'open' : '')}
@@ -43,7 +56,10 @@ export default function Header() {
         {navLinks.map(({ href, label }) => (
           <a key={href} href={href} onClick={() => setMenuOpen(false)}>{label}</a>
         ))}
-        <a href="#pricing" className="btn" onClick={() => setMenuOpen(false)}>Get Started</a>
+        {onGoToPortal && (
+          <button type="button" className="header-portal-link" onClick={handlePortal}>My Portal</button>
+        )}
+        <button type="button" className="btn btn-header-cta" onClick={handleGetStarted}>Get Started</button>
       </nav>
     </header>
   )
