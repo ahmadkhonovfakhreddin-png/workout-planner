@@ -89,17 +89,8 @@ export default function Portal({ user, subscription, onLogout, onGoToSite, onSub
             <section className="portal-dashboard" aria-labelledby="portal-heading">
               <h1 id="portal-heading">Welcome, {name}!</h1>
               <p className="portal-welcome">
-                {hasPlan ? "Here's your overview and your plan." : "You're logged in. Choose a plan to get your workouts and nutrition."}
+                {hasPlan ? "Here's your overview and your plan." : "Here's your dashboard."}
               </p>
-
-              {!hasPlan && onSubscribe && (
-                <div className="portal-no-plan">
-                  <p>Subscribe to unlock personalized workouts, nutrition, and progress tracking.</p>
-                  <button type="button" className="btn btn-primary" onClick={() => onSubscribe('Pro')}>
-                    Choose your plan
-                  </button>
-                </div>
-              )}
 
               {hasPlan && (
                 <>

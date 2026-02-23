@@ -12,6 +12,7 @@ import Footer from './components/Footer'
 import AuthModal from './components/AuthModal'
 import CheckoutModal from './components/CheckoutModal'
 import Portal from './components/Portal'
+import OnboardingWizard, { isOnboardingComplete } from './components/OnboardingWizard'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -21,6 +22,7 @@ function App() {
   const [selectedPlan, setSelectedPlan] = useState(null)
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState('site') // 'site' | 'portal' — when logged in, can browse site without logging out
+  const [onboardingComplete, setOnboardingComplete] = useState(isOnboardingComplete)
 
   const refreshMe = async () => {
     const data = await getMe()
@@ -56,8 +58,18 @@ function App() {
       setCheckoutOpen(true)
       return
     }
-    if (user) return
-    setAuthOpen(true)
+    if (user) {
+      setView('portal')
+      return
+    }
+    // Not logged in: show onboarding questions first (no login modal)
+    setView('onboarding')
+  }
+
+  const handleOnboardingComplete = () => {
+    setOnboardingComplete(true)
+    setView('site')
+    setAuthOpen(true) // After questions, show login/signup to save progress
   }
 
   const handleAuthSuccess = async () => {
@@ -66,7 +78,7 @@ function App() {
       setUser(data.user)
       setSubscription(data.subscription || null)
       setAuthOpen(false)
-      // Go straight to Portal (no checkout step)
+      setView('portal') // Go to portal → onboarding questions first, then dashboard
     }
   }
 
@@ -91,7 +103,20 @@ function App() {
     )
   }
 
+  if (view === 'onboarding') {
+    return (
+      <OnboardingWizard onComplete={handleOnboardingComplete} />
+    )
+  }
+
   if (user && view === 'portal') {
+    if (!onboardingComplete) {
+      return (
+        <OnboardingWizard
+          onComplete={() => setOnboardingComplete(true)}
+        />
+      )
+    }
     return (
       <>
         <Portal
