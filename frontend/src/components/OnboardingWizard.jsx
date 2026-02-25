@@ -219,6 +219,41 @@ function GoalStep({ onSelect }) {
   )
 }
 
+function ResultStep({ onDone }) {
+  return (
+    <div className="onboarding-step onboarding-result">
+      <div className="onboarding-result-card">
+        <div className="onboarding-result-image" aria-hidden="true" />
+        <h1 className="onboarding-result-title">
+          <span className="onboarding-result-highlight">81%</span> of your results are
+          <br />
+          about nutrition
+        </h1>
+        <p className="onboarding-result-text">
+          To make the most gains in muscle mass and strength, you need:
+        </p>
+        <ul className="onboarding-result-list">
+          <li>
+            <span className="onboarding-result-check">✓</span>
+            <span>Enough total calories each day.</span>
+          </li>
+          <li>
+            <span className="onboarding-result-check">✓</span>
+            <span>Adequate protein to actually rebuild more muscle tissue.</span>
+          </li>
+        </ul>
+        <button
+          type="button"
+          className="onboarding-result-button"
+          onClick={onDone}
+        >
+          Got it
+        </button>
+      </div>
+    </div>
+  )
+}
+
 const ONBOARDING_STORAGE_KEY = 'muscle_onboarding_done'
 
 export function isOnboardingComplete() {
@@ -257,10 +292,15 @@ export default function OnboardingWizard({ onComplete }) {
   const handleBodyFatSelect = (bodyFat) => {
     const updatedAnswers = { ...answers, bodyFat }
     setAnswers(updatedAnswers)
+    setStep(6)
+  }
+
+  const handleResultDone = () => {
+    const finalAnswers = answers
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(ONBOARDING_STORAGE_KEY, '1')
       try {
-        localStorage.setItem('muscle_onboarding_answers', JSON.stringify(updatedAnswers))
+        localStorage.setItem('muscle_onboarding_answers', JSON.stringify(finalAnswers))
       } catch (_) {}
     }
     onComplete?.()
@@ -285,12 +325,14 @@ export default function OnboardingWizard({ onComplete }) {
         <span className={`onboarding-step-dot ${step >= 3 ? 'active' : ''}`} />
         <span className={`onboarding-step-dot ${step >= 4 ? 'active' : ''}`} />
         <span className={`onboarding-step-dot ${step >= 5 ? 'active' : ''}`} />
+        <span className={`onboarding-step-dot ${step >= 6 ? 'active' : ''}`} />
       </div>
       {step === 1 && <AgeStep onSelect={handleAgeSelect} />}
       {step === 2 && <GenderStep onSelect={handleGenderSelect} />}
       {step === 3 && <BodyTypeStep onSelect={handleBodyTypeSelect} />}
       {step === 4 && <GoalStep onSelect={handleGoalSelect} />}
       {step === 5 && <BodyFatStep onSelect={handleBodyFatSelect} />}
+      {step === 6 && <ResultStep onDone={handleResultDone} />}
     </div>
   )
 }
