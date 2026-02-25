@@ -1,8 +1,7 @@
-# Success Stories images
+# Public assets
 
-Add your transformation images here so they show in the Success Stories section:
+**Success Stories (before/after):**
+- **success-story-1.png** — First transformation photo
+- **success-story-2.png** — Second transformation photo
 
-- **sam-transformation.png** — Before/after for Sam’s story
-- **peter-transformation.png** — Before/after for Peter’s story
-
-If these files are missing, the site shows placeholder images instead.
+Copy your two before/after screenshots into this folder with these exact names. If they are missing, the site shows placeholder images instead.

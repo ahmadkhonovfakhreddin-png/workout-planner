@@ -17,8 +17,8 @@ const BODY_TYPE_OPTIONS = [
     id: 'ectomorph',
     label: 'Ectomorph',
     description: 'Lean, slender build — fast metabolism',
-    img: '/assets/body-types.png',
-    position: '0%', // left third of reference image
+    img: '/assets/ectomorph.png',
+    position: null, // full photo
   },
   {
     id: 'mesomorph',
@@ -33,6 +33,34 @@ const BODY_TYPE_OPTIONS = [
     description: 'Rounder build — gains weight more easily',
     img: '/assets/body-types.png',
     position: '100%', // right third
+  },
+]
+
+const BODY_FAT_RANGES = [
+  { id: '5-9', label: '5-9%' },
+  { id: '10-14', label: '10-14%' },
+  { id: '15-19', label: '15-19%' },
+  { id: '20-24', label: '20-24%' },
+  { id: '25-29', label: '25-29%' },
+  { id: '30-40', label: '30-40%' },
+  { id: '40+', label: '>40%' },
+]
+
+const GOAL_OPTIONS = [
+  {
+    id: 'lose-weight',
+    label: 'Lose Weight',
+    img: 'https://images.unsplash.com/photo-1554344058-8d1d1dbc5960?w=400&q=80',
+  },
+  {
+    id: 'gain-muscle',
+    label: 'Gain Muscle Mass',
+    img: 'https://images.unsplash.com/photo-1598971639058-8cdbd776edfc?w=400&q=80',
+  },
+  {
+    id: 'get-shredded',
+    label: 'Get Shredded',
+    img: 'https://images.unsplash.com/photo-1594381898411-846e7d193883?w=400&q=80',
   },
 ]
 
@@ -103,8 +131,8 @@ function BodyTypeStep({ onSelect }) {
             aria-pressed="false"
           >
             <div
-              className="onboarding-card-media onboarding-card-media-body-type"
-              style={{ '--body-type-position': opt.position }}
+              className={`onboarding-card-media ${opt.position != null ? 'onboarding-card-media-body-type' : ''}`}
+              style={opt.position != null ? { '--body-type-position': opt.position } : undefined}
             >
               <img src={opt.img} alt={opt.label} />
             </div>
@@ -122,6 +150,75 @@ function BodyTypeStep({ onSelect }) {
   )
 }
 
+function BodyFatStep({ onSelect }) {
+  const [index, setIndex] = useState(3) // default to 20-24%
+  const current = BODY_FAT_RANGES[index]
+
+  const handleChange = (event) => {
+    setIndex(Number(event.target.value))
+  }
+
+  const handleContinue = () => {
+    onSelect(current.id)
+  }
+
+  return (
+    <div className="onboarding-step onboarding-bodyfat">
+      <h1 className="onboarding-title">Choose your level of body fat</h1>
+      <div className="onboarding-bodyfat-card">
+        <div className="onboarding-bodyfat-current">
+          <span>{current.label}</span>
+        </div>
+        <div className="onboarding-bodyfat-slider">
+          <input
+            type="range"
+            min="0"
+            max={BODY_FAT_RANGES.length - 1}
+            step="1"
+            value={index}
+            onChange={handleChange}
+          />
+          <div className="onboarding-bodyfat-labels">
+            <span>{BODY_FAT_RANGES[0].label}</span>
+            <span>{BODY_FAT_RANGES[BODY_FAT_RANGES.length - 1].label}</span>
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        className="onboarding-bodyfat-continue"
+        onClick={handleContinue}
+      >
+        Continue
+      </button>
+    </div>
+  )
+}
+
+function GoalStep({ onSelect }) {
+  return (
+    <div className="onboarding-step onboarding-goal">
+      <h1 className="onboarding-title">Choose your goal</h1>
+      <div className="onboarding-cards onboarding-cards-stack">
+        {GOAL_OPTIONS.map((opt) => (
+          <button
+            key={opt.id}
+            type="button"
+            className="onboarding-card onboarding-card-row"
+            onClick={() => onSelect(opt.id)}
+            aria-pressed="false"
+          >
+            <span className="onboarding-card-label">{opt.label}</span>
+            <div className="onboarding-card-media onboarding-card-media-inline">
+              <img src={opt.img} alt={opt.label} />
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const ONBOARDING_STORAGE_KEY = 'muscle_onboarding_done'
 
 export function isOnboardingComplete() {
@@ -131,7 +228,11 @@ export function isOnboardingComplete() {
 
 export default function OnboardingWizard({ onComplete }) {
   const [step, setStep] = useState(1)
-  const [answers, setAnswers] = useState({ age: null, gender: null, bodyType: null })
+  const [answers, setAnswers] = useState({ age: null, gender: null, bodyType: null, bodyFat: null, goal: null })
+
+  const handleBack = () => {
+    setStep((prev) => (prev > 1 ? prev - 1 : prev))
+  }
 
   const handleAgeSelect = (age) => {
     setAnswers((a) => ({ ...a, age }))
@@ -145,10 +246,21 @@ export default function OnboardingWizard({ onComplete }) {
 
   const handleBodyTypeSelect = (bodyType) => {
     setAnswers((a) => ({ ...a, bodyType }))
+    setStep(4)
+  }
+
+  const handleGoalSelect = (goal) => {
+    setAnswers((a) => ({ ...a, goal }))
+    setStep(5)
+  }
+
+  const handleBodyFatSelect = (bodyFat) => {
+    const updatedAnswers = { ...answers, bodyFat }
+    setAnswers(updatedAnswers)
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem(ONBOARDING_STORAGE_KEY, '1')
       try {
-        localStorage.setItem('muscle_onboarding_answers', JSON.stringify({ ...answers, bodyType }))
+        localStorage.setItem('muscle_onboarding_answers', JSON.stringify(updatedAnswers))
       } catch (_) {}
     }
     onComplete?.()
@@ -156,14 +268,29 @@ export default function OnboardingWizard({ onComplete }) {
 
   return (
     <div className="onboarding" role="region" aria-label="Onboarding">
+      <div className="onboarding-header">
+        {step > 1 && (
+          <button
+            type="button"
+            className="onboarding-back"
+            onClick={handleBack}
+          >
+            ← Back
+          </button>
+        )}
+      </div>
       <div className="onboarding-progress">
         <span className="onboarding-step-dot active" />
         <span className={`onboarding-step-dot ${step >= 2 ? 'active' : ''}`} />
         <span className={`onboarding-step-dot ${step >= 3 ? 'active' : ''}`} />
+        <span className={`onboarding-step-dot ${step >= 4 ? 'active' : ''}`} />
+        <span className={`onboarding-step-dot ${step >= 5 ? 'active' : ''}`} />
       </div>
       {step === 1 && <AgeStep onSelect={handleAgeSelect} />}
       {step === 2 && <GenderStep onSelect={handleGenderSelect} />}
       {step === 3 && <BodyTypeStep onSelect={handleBodyTypeSelect} />}
+      {step === 4 && <GoalStep onSelect={handleGoalSelect} />}
+      {step === 5 && <BodyFatStep onSelect={handleBodyFatSelect} />}
     </div>
   )
 }

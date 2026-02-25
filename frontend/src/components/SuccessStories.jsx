@@ -4,7 +4,7 @@ const STORIES = [
   {
     id: 'sam',
     img: '/assets/sam-transformation.png',
-    placeholder: 'https://placehold.co/400x300/1a1a2e/eaeaea?text=Sam+Transformation',
+    placeholder: 'https://picsum.photos/seed/sam-transform/400/300',
     alt: 'Before and after transformation of client Sam',
     rating: '⭐⭐⭐⭐⭐',
     title: "Sam's Transformation",
@@ -20,7 +20,7 @@ const STORIES = [
   {
     id: 'peter',
     img: '/assets/peter-transformation.png',
-    placeholder: 'https://placehold.co/400x300/1a1a2e/eaeaea?text=Peter+Transformation',
+    placeholder: 'https://picsum.photos/seed/peter-transform/400/300',
     alt: 'Before and after transformation of client Peter',
     rating: '⭐⭐⭐⭐⭐',
     title: "Peter's Transformation",
