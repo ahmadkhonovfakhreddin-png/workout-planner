@@ -69,7 +69,8 @@ function App() {
   const handleOnboardingComplete = () => {
     setOnboardingComplete(true)
     setView('site')
-    setAuthOpen(true) // After questions, show login/signup to save progress
+    setSelectedPlan('Pro')
+    setCheckoutOpen(true) // After questions, go directly to subscription checkout
   }
 
   const handleAuthSuccess = async () => {
