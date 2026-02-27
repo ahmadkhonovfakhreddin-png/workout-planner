@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 const STORIES = [
   {
     id: 'sam',
-    img: '/assets/sam-transformation.png',
+    img: '/assets/sam-transformation.jpg',
     placeholder: 'https://picsum.photos/seed/sam-transform/400/300',
     alt: 'Before and after transformation of client Sam',
     rating: '⭐⭐⭐⭐⭐',
@@ -19,7 +19,7 @@ const STORIES = [
   },
   {
     id: 'peter',
-    img: '/assets/peter-transformation.png',
+    img: '/assets/peter-transformation.jpg',
     placeholder: 'https://picsum.photos/seed/peter-transform/400/300',
     alt: 'Before and after transformation of client Peter',
     rating: '⭐⭐⭐⭐⭐',

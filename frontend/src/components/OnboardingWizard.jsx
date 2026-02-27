@@ -1066,7 +1066,7 @@ export function isOnboardingComplete() {
   return !!localStorage.getItem(ONBOARDING_STORAGE_KEY)
 }
 
-export default function OnboardingWizard({ onComplete }) {
+export default function OnboardingWizard({ onComplete, onCancel }) {
   const [step, setStep] = useState(1)
   const [wheelOpen, setWheelOpen] = useState(false)
   const [answers, setAnswers] = useState({
@@ -1096,6 +1096,12 @@ export default function OnboardingWizard({ onComplete }) {
 
   const handleBack = () => {
     setStep((prev) => (prev > 1 ? prev - 1 : prev))
+  }
+
+  const handleExit = () => {
+    if (onCancel) {
+      onCancel()
+    }
   }
 
   const handleAgeSelect = (age) => {
@@ -1182,6 +1188,15 @@ export default function OnboardingWizard({ onComplete }) {
             onClick={handleBack}
           >
             ← Back
+          </button>
+        )}
+        {onCancel && (
+          <button
+            type="button"
+            className="onboarding-back"
+            onClick={handleExit}
+          >
+            ← Back to site
           </button>
         )}
       </div>

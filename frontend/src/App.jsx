@@ -106,7 +106,10 @@ function App() {
 
   if (view === 'onboarding') {
     return (
-      <OnboardingWizard onComplete={handleOnboardingComplete} />
+      <OnboardingWizard
+        onComplete={handleOnboardingComplete}
+        onCancel={() => setView('site')}
+      />
     )
   }
 
@@ -115,6 +118,7 @@ function App() {
       return (
         <OnboardingWizard
           onComplete={() => setOnboardingComplete(true)}
+          onCancel={() => setView('portal')}
         />
       )
     }
